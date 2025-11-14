@@ -196,36 +196,25 @@ if ($group_by === 'nama') {
 
         <div class="row g-2">
             <div class="col-md-3">
-                <div class="d-flex">
-                    <select name="id_siswa" class="form-select" id="select_siswa">
-                        <option value="">-- Pilih Siswa --</option>
-                        <?php foreach ($siswa as $s): ?>
-                            <option value="<?= $s['id_siswa'] ?>" <?= ($edit_record && $edit_record['id_siswa']==$s['id_siswa'])? 'selected' : '' ?>><?= $s['nama'] ?> (<?= $s['kelas'] ?>)</option>
-                        <?php endforeach; ?>
-                    </select>
-                    <button type="button" class="btn btn-outline-secondary ms-2" id="btn_new_siswa">+</button>
-                </div>
-                <div class="mt-2" id="new_siswa_fields" style="display:none;">
-                    <input type="text" name="new_siswa_nama" class="form-control mb-1" placeholder="Nama siswa">
-                    <input type="text" name="new_siswa_kelas" class="form-control" placeholder="Kelas (e.g. 10A)">
-                </div>
-            </div>
+    <label class="form-label fw-bold">Nama Siswa</label>
+    <input type="text" name="new_siswa_nama" class="form-control mb-2" placeholder="Nama siswa" required>
 
-            <div class="col-md-3">
-                <div class="d-flex">
-                    <select name="id_pelanggaran" class="form-select" id="select_pelanggaran">
-                        <option value="">-- Jenis Pelanggaran --</option>
-                        <?php foreach ($pelanggaran as $p): ?>
-                            <option value="<?= $p['id_pelanggaran'] ?>" <?= ($edit_record && $edit_record['id_pelanggaran']==$p['id_pelanggaran'])? 'selected' : '' ?>><?= $p['nama_pelanggaran'] ?> (<?= $p['kategori'] ?>)</option>
-                        <?php endforeach; ?>
-                    </select>
-                    <button type="button" class="btn btn-outline-secondary ms-2" id="btn_new_pelanggaran">+</button>
-                </div>
-                <div class="mt-2" id="new_pelanggaran_fields" style="display:none;">
-                    <input type="text" name="new_pelanggaran_nama" class="form-control mb-1" placeholder="Nama pelanggaran">
-                    <input type="text" name="new_pelanggaran_kategori" class="form-control" placeholder="Kategori">
-                </div>
-            </div>
+    <label class="form-label fw-bold">Kelas</label>
+    <input type="text" name="new_siswa_kelas" class="form-control" placeholder="Kelas (misal: 10A)" required>
+</div>
+
+<div class="col-md-3">
+    <label class="form-label fw-bold">Nama Pelanggaran</label>
+    <input type="text" name="new_pelanggaran_nama" class="form-control mb-2" placeholder="Nama pelanggaran" required>
+
+    <label class="form-label fw-bold">Kategori</label>
+    <select name="new_pelanggaran_kategori" class="form-select">
+        <option value="">-- Pilih Kategori --</option>
+        <option value="Ringan">Ringan</option>
+        <option value="Sedang">Sedang</option>
+        <option value="Berat">Berat</option>
+    </select>
+</div>
 
             <div class="col-md-3">
                 <div class="d-flex">
@@ -352,6 +341,7 @@ if ($group_by === 'nama') {
         <?php endif; ?>
         </tbody>
     </table>
+    <button><a href="reports/report.php" class="btn btn-succes">download</a></button>
 </div>
 
 </body>
