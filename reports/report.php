@@ -1,6 +1,11 @@
 <?php
+
+require __DIR__.'/../vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 // Koneksi Database
-$koneksi = mysqli_connect("localhost", "root", "", "db_sukas");
+$koneksi = mysqli_connect("localhost", "root", "123", "db_sukas");
 
 // Query JOIN
 $q = mysqli_query($koneksi, "
@@ -14,34 +19,55 @@ $q = mysqli_query($koneksi, "
     ORDER BY r.id_riwayat ASC
 ");
 
-// Nama file
-$filename = "riwayat_pelanggaran_" . date('Ymd_His') . ".csv";
+// Buat Spreadsheet
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
 
-// Header biar langsung download
-header('Content-Type: text/csv; charset=utf-8');
-header("Content-Disposition: attachment; filename=$filename");
+// Judul Header
+$headers = [
+    'A1' => 'No',
+    'B1' => 'Nama Siswa',
+    'C1' => 'Kelas',
+    'D1' => 'Pelanggaran',
+    'E1' => 'Petugas',
+    'F1' => 'Tanggal',
+    'G1' => 'Keterangan'
+];
 
-// Output buffer ke file
-$output = fopen('php://output', 'w');
-
-// Header kolom CSV
-fputcsv($output, ['No', 'Nama Siswa', 'Kelas', 'Pelanggaran', 'Petugas', 'Tanggal', 'Keterangan']);
-
-$no = 1;
-
-// Isi data baris per baris
-while ($d = mysqli_fetch_assoc($q)) {
-    fputcsv($output, [
-        $no++,
-        $d['nama_siswa'],
-        $d['kelas'],
-        $d['nama_pelanggaran'],
-        $d['nama_petugas'],
-        $d['tanggal'],
-        $d['keterangan']
-    ]);
+foreach ($headers as $cell => $text) {
+    $sheet->setCellValue($cell, $text);
 }
 
-fclose($output);
+// Isi Data
+$row = 2;
+$no = 1;
+
+while ($d = mysqli_fetch_assoc($q)) {
+    $sheet->setCellValue('A' . $row, $no++);
+    $sheet->setCellValue('B' . $row, $d['nama_siswa']);
+    $sheet->setCellValue('C' . $row, $d['kelas']);
+    $sheet->setCellValue('D' . $row, $d['nama_pelanggaran']);
+    $sheet->setCellValue('E' . $row, $d['nama_petugas']);
+    $sheet->setCellValue('F' . $row, $d['tanggal']);
+    $sheet->setCellValue('G' . $row, $d['keterangan']);
+    $row++;
+}
+
+// Auto-size kolom
+foreach (range('A', 'G') as $columnID) {
+    $sheet->getColumnDimension($columnID)->setAutoSize(true);
+}
+
+// Nama file
+$filename = "riwayat_pelanggaran_" . date('Ymd_His') . ".xlsx";
+
+// Header download
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header("Content-Disposition: attachment; filename=$filename");
+header('Cache-Control: max-age=0');
+
+// Tulis file
+$writer = new Xlsx($spreadsheet);
+$writer->save('php://output');
 exit;
 ?>
