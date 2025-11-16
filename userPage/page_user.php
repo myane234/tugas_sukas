@@ -1,5 +1,5 @@
 <?php
-require 'koneksi.php';
+require '../koneksi.php';
 
 $hasil = [];
 $error = '';
@@ -44,6 +44,7 @@ if (isset($_POST['cek'])) {
 <div class="container py-4">
 
     <h2 class="text-center mb-4">Cek Riwayat Pelanggaran</h2>
+    <a href="../logout.php">Log Out</a>
 
     <!-- FORM INPUT NAMA & KELAS -->
     <form method="POST" class="card p-3 mb-4" style="max-width:500px; margin:auto;">

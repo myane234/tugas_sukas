@@ -1,6 +1,6 @@
 <?php
 // ====== KONEKSI DATABASE ======
-require 'koneksi.php';
+require '../koneksi.php';
 $no = 1; // untuk nomor urut di tabel
 
 
@@ -182,6 +182,7 @@ if ($group_by === 'nama') {
 
 <div class="container py-4">
     <h2 class="text-center mb-4">CRUD Pelanggaran Siswa</h2>
+    <a href="../logout.php">Logout</a>
 
     <!-- Form Tambah / Update -->
     <form method="POST" class="card p-3 mb-4">
@@ -338,7 +339,7 @@ if ($group_by === 'nama') {
         <?php endif; ?>
         </tbody>
     </table>
-    <button><a href="reports/report.php" class="btn btn-succes">download</a></button>
+    <button><a href="../reports/report.php" class="btn btn-succes">download</a></button>
 </div>
 
 </body>

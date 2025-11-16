@@ -29,7 +29,7 @@ if (isset($_POST['login_admin'])) {
                 $_SESSION['role'] = $row['role'];
 
                 // Redirect ke dashboard admin (naik folder 1)
-                header("Location: ../admin/index.php");
+                header("Location: ../adminPage/index.php");
                 exit;
             } else {
                 $error = "Hanya admin yang boleh login!";
