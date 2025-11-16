@@ -20,7 +20,7 @@ if(isset($_POST['login'])) {
             $_SESSION['username'] = $user_data['username'];
             $_SESSION['role'] = $user_data['role'];
             
-            header("Location: dashboard_user.php");
+            header("Location: ../page_user.php");
             exit;
         } else {
             $error = "Password salah!";

@@ -2,7 +2,7 @@
 
 $host = "localhost";
 $user = "root";
-$pass = "123";
+$pass = "";
 $db   = "db_sukas";
 $conn = mysqli_connect($host, $user, $pass, $db);
 if (!$conn) {

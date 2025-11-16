@@ -3,9 +3,11 @@
 require __DIR__.'/../vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
 
 // Koneksi Database
-$koneksi = mysqli_connect("localhost", "root", "123", "db_sukas");
+$koneksi = mysqli_connect("localhost", "root", "", "db_sukas");
 
 // Query JOIN
 $q = mysqli_query($koneksi, "
@@ -23,7 +25,7 @@ $q = mysqli_query($koneksi, "
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
-// Judul Header
+// Header
 $headers = [
     'A1' => 'No',
     'B1' => 'Nama Siswa',
@@ -41,7 +43,6 @@ foreach ($headers as $cell => $text) {
 // Isi Data
 $row = 2;
 $no = 1;
-
 while ($d = mysqli_fetch_assoc($q)) {
     $sheet->setCellValue('A' . $row, $no++);
     $sheet->setCellValue('B' . $row, $d['nama_siswa']);
@@ -53,10 +54,41 @@ while ($d = mysqli_fetch_assoc($q)) {
     $row++;
 }
 
-// Auto-size kolom
-foreach (range('A', 'G') as $columnID) {
-    $sheet->getColumnDimension($columnID)->setAutoSize(true);
+// LAST ROW
+$lastRow = $row - 1;
+
+// Auto-size
+foreach (range('A', 'G') as $col) {
+    $sheet->getColumnDimension($col)->setAutoSize(true);
 }
+
+// STYLE HEADER (Warna + Bold + Tengah)
+$sheet->getStyle('A1:G1')->applyFromArray([
+    'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+    'alignment' => ['horizontal' => 'center'],
+    'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        'color' => ['rgb' => '4F81BD']
+    ]
+]);
+
+// BORDER TABLE
+$sheet->getStyle("A1:G{$lastRow}")->applyFromArray([
+    'borders' => [
+        'allBorders' => [
+            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+            'color' => ['rgb' => '000000']
+        ]
+    ]
+]);
+
+// BUAT TABLE EXCEL STRUCTURED
+$tableRange = "A1:G{$lastRow}";
+$table = new Table($tableRange, 'RiwayatTable');
+$tableStyle = new TableStyle();
+$tableStyle->setTheme(TableStyle::TABLE_STYLE_MEDIUM9);
+$table->setStyle($tableStyle);
+$sheet->addTable($table);
 
 // Nama file
 $filename = "riwayat_pelanggaran_" . date('Ymd_His') . ".xlsx";
@@ -70,4 +102,5 @@ header('Cache-Control: max-age=0');
 $writer = new Xlsx($spreadsheet);
 $writer->save('php://output');
 exit;
+
 ?>

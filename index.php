@@ -190,24 +190,27 @@ if ($group_by === 'nama') {
 
         <div class="row g-2">
             <div class="col-md-3">
-    <label class="form-label fw-bold">Nama Siswa</label>
-    <input type="text" name="new_siswa_nama" class="form-control mb-2" placeholder="Nama siswa" required>
-
-    <label class="form-label fw-bold">Kelas</label>
-    <input type="text" name="new_siswa_kelas" class="form-control" placeholder="Kelas (misal: 10A)" required>
-</div>
+                <div class="d-flex">
+                    <select name="id_siswa" class="form-select" id="select_siswa">
+                        <option value="">-- Siswa --</option>
+                        <?php foreach ($siswa as $sw): ?>
+                            <option value="<?= $sw['id_siswa'] ?>" <?= ($edit_record && $edit_record['id_siswa']==$sw['id_siswa'])? 'selected' : '' ?>><?= $sw['nama'] ?> (<?= $sw['kelas'] ?>)</option>
+                        <?php endforeach; ?>
+                    </select>
+                    <button type="button" class="btn btn-outline-secondary ms-2" id="btn_new_siswa">+</button> 
+                </div>
+            </div>
 
 <div class="col-md-3">
-    <label class="form-label fw-bold">Nama Pelanggaran</label>
-    <input type="text" name="new_pelanggaran_nama" class="form-control mb-2" placeholder="Nama pelanggaran" required>
-
-    <label class="form-label fw-bold">Kategori</label>
-    <select name="new_pelanggaran_kategori" class="form-select">
-        <option value="">-- Pilih Kategori --</option>
-        <option value="Ringan">Ringan</option>
-        <option value="Sedang">Sedang</option>
-        <option value="Berat">Berat</option>
-    </select>
+    <div class="d-flex">
+        <select name="id_pelanggaran" class="form-select" id="select_pelanggaran">
+            <option value="">-- Pelanggaran --</option>
+            <?php foreach ($pelanggaran as $pl): ?>
+                <option value="<?= $pl['id_pelanggaran'] ?>" <?= ($edit_record && $edit_record['id_pelanggaran']==$pl['id_pelanggaran'])? 'selected' : '' ?>><?= $pl['nama_pelanggaran'] ?> (<?= $pl['kategori'] ?>)</option>
+            <?php endforeach; ?>
+        </select>
+        <button type="button" class="btn btn-outline-secondary ms-2" id="btn_new_pelanggaran">+</button>
+    </div>
 </div>
 
             <div class="col-md-3">
